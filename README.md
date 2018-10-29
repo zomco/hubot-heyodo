@@ -1,3 +1,21 @@
-# Scapegoat
+# Hubot-Scapegoat
 
-a chat bot help user reply message anonymous and check abuse of special mark.
+![](resources/scapegoat.png)
+
+a [hubot](https://hubot.github.com/) for replying message anonymously and checking abuse of special mark.
+
+![](resources/example.gif)
+
+
+## Setup
+
+refer to [hubot-bearychat](https://github.com/bearyinnovative/hubot-bearychat):
+
+    $ export HUBOT_BEARYCHAT_TOKENS=token-token-token-here
+    $ export HUBOT_BEARYCHAT_MODE=rtm
+    $ ./bin/hubot -a bearychat
+
+
+## LICENSE
+
+MIT
