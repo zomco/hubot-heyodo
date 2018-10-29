@@ -1,7 +1,5 @@
 # Hubot-Scapegoat
 
-![](resources/scapegoat.png)
-
 a [hubot](https://hubot.github.com/) for replying message anonymously and checking abuse of special mark.
 
 ![](resources/example.gif)
