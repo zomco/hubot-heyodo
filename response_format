@@ -195,3 +195,93 @@ Response {
         room: [Object],
         text: 'heyodo u make me cry',
         id: '1540527274387.0182' } } }
+
+
+{ channel_id: '=bwSVj',
+  created_ts: 1540608583117,
+  disable_markdown: false,
+  instance_no: 1,
+  instance_seq: 19,
+  key: '1540608583117.0119',
+  refer_key: null,
+  resource_key: '542571fa-053c-4af8-96ec-29014bfe8a46',
+  subtype: 'normal',
+  text: '@<==bxcAL=>  犯得上发射点发射点',
+  ts: 1540608583117,
+  type: 'channel_message',
+  uid: '=bxc6f',
+  vchannel_id: '=bwSVj' }
+
+
+{ created_ts: 1540608866565,
+  disable_markdown: false,
+  instance_no: 1,
+  instance_seq: 52,
+  key: '1540608866565.0152',
+  refer_key: null,
+  resource_key: '31c32d53-032a-4bec-8bce-4c5b80d7a0fe',
+  subtype: 'normal',
+  text: '牛牛牛牛牛',
+  to_uid: '=bxcAL',
+  ts: 1540608866565,
+  type: 'message',
+  uid: '=bxc6f',
+  unknown_before: false,
+  vchannel_id: '=c4Xx45krV' }
+
+
+  { created: '2018-10-27T04:14:31.000+0000',
+  created_ts: 1540613670867,
+  edited: false,
+  id: '=gbdIk',
+  is_channel: false,
+  key: '1540613670867.0271',
+  pin_id: null,
+  reactions: [],
+  refer_key: null,
+  repost:
+   { created_ts: 1540608532699,
+     disable_markdown: false,
+     id: '=bw7h8',
+     message_key: '1540608532699.0116',
+     robot_id: null,
+     subtype: 'normal',
+     team_id: '=bwE8p',
+     text: '@<==bxcAL=> 发射点发射点发射点',
+     uid: '=bxc6f',
+     vchannel_id: '=bwTkK' },
+  robot_id: null,
+  subtype: 'forwarded',
+  team_id: '=bwE8p',
+  text: '转发了消息',
+  text_i18n: { en: 'fowarded message', 'zh-CN': '转发了消息' },
+  thread_key: null,
+  ts: 1540613670879,
+  type: 'message',
+  uid: '=bxc6f',
+  updated: '2018-10-27T04:14:31.000+0000',
+  vchannel_id: '=c4Xx45krV' }
+
+
+  [ { disable_markdown: false,
+    refer_text: '电风扇电风扇发射点发射点',
+    subtype: 'normal',
+    text: 'zomco: 电风扇电风扇发射点发射点',
+    type: 'refer',
+    uid: '=bxc6f' } ]
+
+
+{ channel_id: '=bwSVj',
+  created_ts: 1540692937718,
+  disable_markdown: false,
+  instance_no: 1,
+  instance_seq: 39,
+  key: '1540692937718.0139',
+  refer_key: null,
+  resource_key: '637c969c-96f6-48ac-b290-2b3fd92a5fdb',
+  subtype: 'normal',
+  text: 'fsdfsdff!!!!',
+  ts: 1540692937718,
+  type: 'channel_message',
+  uid: '=bxc6f',
+  vchannel_id: '=bwSVj' }

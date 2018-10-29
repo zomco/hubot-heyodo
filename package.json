@@ -1,10 +1,11 @@
 {
-  "name": "heyodo",
+  "name": "scapegoat",
   "version": "0.0.0",
   "private": true,
   "author": "Zeu Fung <zomcoo@gmail.com>",
-  "description": "bearychat bot",
+  "description": "a chat bot help user reply message anonymous",
   "dependencies": {
+    "bearychat": "^1.2.0",
     "hubot": "^3.1.1",
     "hubot-bearychat": "^0.7.2",
     "hubot-help": "^1.0.1",
