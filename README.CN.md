@@ -1,12 +1,12 @@
 # Hubot-speaker
 
-a [hubot](https://hubot.github.com/) for replying message anonymously and checking abuse of special mark automatically.
+一个可以匿名回复消息和自动检测字符滥用的[hubot](https://hubot.github.com/)。
 
 ![](resources/example.gif)
 
 ## Setup
 
-refer to [hubot-bearychat](https://github.com/bearyinnovative/hubot-bearychat):
+参考 [hubot-bearychat](https://github.com/bearyinnovative/hubot-bearychat):
 
     $ export HUBOT_BEARYCHAT_TOKENS=token-token-token-here
     $ export HUBOT_BEARYCHAT_MODE=rtm

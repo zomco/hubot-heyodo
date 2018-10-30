@@ -1,9 +1,9 @@
 {
-  "name": "scapegoat",
+  "name": "speaker",
   "version": "0.0.0",
   "private": true,
   "author": "Zeu Fung <zomcoo@gmail.com>",
-  "description": "a chat bot help user reply message anonymous",
+  "description": "a hubot for replying message anonymously",
   "dependencies": {
     "bearychat": "^1.2.0",
     "hubot": "^3.1.1",
