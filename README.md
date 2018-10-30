@@ -1,4 +1,4 @@
-# Hubot-speaker
+# hubot-speaker
 
 a [hubot](https://hubot.github.com/) for replying message anonymously and checking abuse of special mark automatically.
 

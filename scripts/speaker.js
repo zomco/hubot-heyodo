@@ -39,6 +39,7 @@ if (!token) {
 // 测试文本中的感叹号，表达式参考 https://en.wikipedia.org/wiki/Exclamation_mark
 EXCLM_WARN = true;
 EXCLM_REGEX = /[\u0021\u01C3\u203C\u2048\u2049\u26A0\u2755\u2757\u2762\u2763\uA71D\uA71E\uA71F\uFE57\uFF01]/gu;
+BOT_NAME = '传声筒';
 
 module.exports = async (robot) => {
 
@@ -128,21 +129,29 @@ module.exports = async (robot) => {
         const newMessage = robot.adapter.client.packMessage(true, newEnvelope, [newText]);
         robot.adapter.client.sendMessage(newEnvelope, newMessage);
       } else if (is_member === false) {
-        res.send(`背锅侠还不是讨论组 #${channelInfo.name} 的成员。`);
+        res.send(`@${BOT_NAME} 还不是讨论组 #${channelInfo.name} 的成员。`);
       } else {
         const { error = '' } = channelInfo;
         res.send(`出了点小问题，请稍后重试。（${error}）`);
       }
       envelopes[message.uid] = null;
     } else if (message.subtype === 'normal' && !newEnvelope) {
-      res.send(`
-      如何借助 @speaker 匿名回复消息:
-    1. 把 @speaker 加进讨论组Z。
-    2. 把讨论组Z中被回复消息A转发给 @speaker 。
-    3. 把回复消息B发给 @speaker 。
-    4. @speaker 在讨论组Z中以消息B回复消息A。
-    5. 过程是匿名的，除非你在回复消息B中暴露自己。
-      `);
+      robot.emit('bearychat.attachment', {
+        message: res.message,
+        text: '使用方法',
+        attachments: [
+          {
+            text: '把想要匿名回复的消息转发给我，顺便说点什么，我就是你的传声筒',
+          },
+          {
+            images: [
+              { 
+                url: 'https://github.com/zomco/hubot-speaker/blob/master/resources/example.gif?raw=true',
+              }
+            ]
+          }
+        ]
+      });
     }
 
   });
