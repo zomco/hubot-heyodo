@@ -39,6 +39,8 @@ if (!token) {
 // 测试文本中的感叹号，表达式参考 https://en.wikipedia.org/wiki/Exclamation_mark
 EXCLM_WARN = true;
 EXCLM_REGEX = /[\u0021\u01C3\u203C\u2048\u2049\u26A0\u2755\u2757\u2762\u2763\uA71D\uA71E\uA71F\uFE57\uFF01]/gu;
+EXCLM_THRESH = 0.02;
+// 基本信息
 BOT_NAME = '传声筒';
 AUTHOR = 'zomcoo@gmail.com';
 
@@ -82,7 +84,9 @@ module.exports = async (robot) => {
           length: match.length,
           total: message.text.length,
         });
-        res.reply('滥用感叹号不是成熟的表现，我劝你冷静。');
+        if (match.length / message.text.length >= EXCLM_THRESH) {
+          res.reply('滥用感叹号不是成熟的表现，我劝你冷静。');
+        }
       }
     } else if (message.subtype === 'forwarded') {
       // 检查转发消息
@@ -92,12 +96,14 @@ module.exports = async (robot) => {
         const warning = warnings[message.uid] || [];
         warning.push({
           length: match.length,
-          total: message.text.length,
+          total: repost.text.length,
         });
-        const newEnvelope = packEnvelope(message.vchannel_id, message.uid, message.key);
-        const newText = '你在退群的边缘试探，答应我别转发滥用感叹号的消息好吗？';
-        const newMessage = robot.adapter.client.packMessage(true, newEnvelope, [newText]);
-        robot.adapter.client.sendMessage(newEnvelope, newMessage);
+        if (match.length / repost.text.length >= EXCLM_THRESH) {
+          const newEnvelope = packEnvelope(message.vchannel_id, message.uid, message.key);
+          const newText = '你在退群的边缘试探，答应我别转发滥用感叹号的消息好吗？';
+          const newMessage = robot.adapter.client.packMessage(true, newEnvelope, [newText]);
+          robot.adapter.client.sendMessage(newEnvelope, newMessage);
+        }
       }
     } else {
       // 其他消息不做处理
