@@ -1,29 +1,28 @@
 // Description:
-// speaker
-// 功能介绍:
-//      1. 在讨论组滥用特定字符时自动提醒
-//      2. 在讨论组匿名回复消息
-// 使用说明:
-//    自动提醒
-//      1. 默认开启感叹号检查
-//    匿名回复
-//      1. 把 @speaker 加进讨论组Z。
-//      2. 把讨论组Z中被回复消息A转发给 @speaker 。
-//      3. 把回复消息B发给 @speaker 。
-//      4. @speaker 在讨论组Z中以消息B回复消息A。
-//      5. 过程是匿名的，除非你在回复消息B中暴露自己。
+//   @speaker，传声筒
+//   功能介绍:
+//     1. 在讨论组滥用特定字符时自动提醒
+//     2. 在讨论组匿名回复消息
+//   使用说明:
+//     自动提醒
+//       1. 默认关闭感叹号检查
+//     匿名回复
+//       1. 把 @speaker 加进讨论组Z。
+//       2. 把讨论组Z中被回复消息A转发给 @speaker 。
+//       3. 把回复消息B发给 @speaker 。
+//       4. @speaker 在讨论组Z中以消息B回复消息A。
+//       5. 过程是匿名的，除非你在回复消息B中暴露自己。
 //
 // Dependencies:
 //
 // 
 // Configuration:
-//
+//   HUBOT_EXCLM_WARN
 //
 // Commands:
 //
 //
 // Notes:
-//
 //   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 //
 // Author:
@@ -37,7 +36,7 @@ if (!token) {
 }
 
 // 测试文本中的感叹号，表达式参考 https://en.wikipedia.org/wiki/Exclamation_mark
-EXCLM_WARN = false;
+EXCLM_WARN = process.env.HUBOT_EXCLM_WARN || false;
 EXCLM_REGEX = /[\u0021\u01C3\u203C\u2048\u2049\u26A0\u2755\u2757\u2762\u2763\uA71D\uA71E\uA71F\uFE57\uFF01]/gu;
 EXCLM_THRESH = 0.02;
 // 基本信息
