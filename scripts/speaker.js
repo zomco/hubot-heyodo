@@ -37,7 +37,7 @@ if (!token) {
 }
 
 // 测试文本中的感叹号，表达式参考 https://en.wikipedia.org/wiki/Exclamation_mark
-EXCLM_WARN = true;
+EXCLM_WARN = false;
 EXCLM_REGEX = /[\u0021\u01C3\u203C\u2048\u2049\u26A0\u2755\u2757\u2762\u2763\uA71D\uA71E\uA71F\uFE57\uFF01]/gu;
 EXCLM_THRESH = 0.02;
 // 基本信息
@@ -70,15 +70,15 @@ module.exports = async (robot) => {
   const warnings = {};
   robot.hear(/.+/i, res => {
     const { message: { user: { message } } }= res;
-    // 只处理讨论组消息
-    if (message.type !== 'channel_message') {
+    // 字符检查打开状态下，只处理讨论组消息
+    if (message.type !== 'channel_message' || !EXCLM_WARN) {
       return;
     }
 
     if (message.subtype === 'normal') {
       // 检查普通消息
       const match = message.text.match(EXCLM_REGEX);
-      if (EXCLM_WARN && match) {
+      if (match) {
         const warning = warnings[message.uid] || [];
         warning.push({
           length: match.length,
@@ -92,7 +92,7 @@ module.exports = async (robot) => {
       // 检查转发消息
       const { repost } = message;
       const match = repost.text.match(EXCLM_REGEX);
-      if (EXCLM_WARN && match) {
+      if (match) {
         const warning = warnings[message.uid] || [];
         warning.push({
           length: match.length,

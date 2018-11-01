@@ -1,6 +1,6 @@
 # hubot-speaker
 
-a [hubot](https://hubot.github.com/) for replying message anonymously and checking abuse of special mark automatically.
+a [hubot](https://hubot.github.com/) for replying message anonymously.
 
 ![](resources/example.gif)
 

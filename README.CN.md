@@ -1,6 +1,6 @@
 # hubot-speaker
 
-一个可以匿名回复消息和自动检测字符滥用的[hubot](https://hubot.github.com/)。
+一个可以匿名回复消息的[hubot](https://hubot.github.com/)。
 
 ![](resources/example.gif)
 
