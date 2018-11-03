@@ -42,7 +42,6 @@ if (!token) {
 
 // 基本信息
 BOT_NAME = '传声筒';
-AUTHOR = 'zomcoo@gmail.com';
 
 // 仿照SDK, 构造回复消息的结构体
 const packEnvelope = (channelId, uid, key, speaker) => {
@@ -166,14 +165,14 @@ module.exports = async (robot) => {
             });
             res.reply(`你的声音已传达到 #${name} 。`);
           } else {
-            res.send(`不对，你不该看到这句话，请联系作者。（${AUTHOR}）`);
+            res.send(`出大问题了, 请联系作者。（匿名回复消息类型错误）`);
           }
         } else if (vchannel && vchannel.is_member === false) {
           res.send(`@${BOT_NAME} 还不是${name}的成员。`);
         } else if (vchannel && vchannel.error) {
-          res.send(`出了点小问题，请稍后重试。（${vchannel.error || ''}）`);
+          res.send(`出了点小问题，请稍后重试。（${vchannel.error}）`);
         } else {
-          res.send(`出大问题了, 请联系作者。（${AUTHOR}）`);
+          res.send(`出大问题了, 请联系作者。（匿名回复错误）`);
         }
         envelopes[message.uid] = null;
       } else if (!envelope && attachment) {
@@ -187,17 +186,19 @@ module.exports = async (robot) => {
             .then(resp => resp.json())
             .catch(err => robot.logger.error(err));
           const channel = channels.find(channel => channel.name === channelName);
-          if (channel && channel.is_member) {
+          if (channel && channel.is_member === true) {
             robot.emit('bearychat.attachment', {
               message: { room: { vchannelId: channel.vchannel_id } },
               text: messageText,
               attachments: [{ images: [{ url: attachment }] }],
             });
             res.reply(`你的声音已传达到 #${channelName} 。`);
-          } else if (channel && !channel.is_member){
+          } else if (channel && channel.is_member === false){
             res.reply(`@${BOT_NAME} 还不是讨论组 #${channelName} 的成员。`);
+          } else if (channel && channel.error) {
+            res.send(`出了点小问题，请稍后重试。（${channel.error}）`);
           } else {
-            res.reply(`讨论组 #${channelName} 不存在。`);
+            res.send(`出大问题了, 请联系作者。（讨论组匿名发送文件错误）`);
           }
         } else if (/\s[@][^@\s]+\s$/.test(message.text)) {
           res.reply('暂不支持用户间的匿名消息。')
@@ -216,13 +217,15 @@ module.exports = async (robot) => {
             .then(resp => resp.json())
             .catch(err => robot.logger.error(err));
           const channel = channels.find(channel => channel.name === channelName);
-          if (channel && channel.is_member) {
+          if (channel && channel.is_member === true) {
             robot.messageRoom(channel.vchannel_id, messageText);
             res.reply(`你的声音已传达到 #${channelName} 。`);
-          } else if (channel && !channel.is_member){
+          } else if (channel && channel.is_member === false){
             res.reply(`@${BOT_NAME} 还不是讨论组 #${channelName} 的成员。`);
+          } else if (channel && channel.error) {
+            res.send(`出了点小问题，请稍后重试。（${channel.error}）`);
           } else {
-            res.reply(`讨论组 #${channelName} 不存在。`);
+            res.send(`出大问题了, 请联系作者。（讨论组匿名发送文本错误）`);
           }
         } else if (/\s[@][^@\s]+\s$/.test(message.text)) {
           // 没有缓存转发消息，则直接匿名发送消息到用户
@@ -245,7 +248,7 @@ module.exports = async (robot) => {
           res.send('以#讨论组或@用户名结尾，传声筒可以把消息发给对方。');
         }
       } else {
-        res.send(`不对，你不该看到这句话，请联系作者。（${AUTHOR}）`);
+        res.send(`消息缓存错误，请输入 clear 清空缓存。`);
       }
     } else {
       // 未知消息类型
@@ -258,7 +261,7 @@ module.exports = async (robot) => {
   robot.error((err, res) => {
     robot.logger.error(err);
     if (res) {
-      res.reply(`出大问题了, 请联系作者。（${AUTHOR}）`);
+      res.reply(`出大问题了, 请联系作者。（${err.message}）`);
     }
     process.exit(1);
   });
