@@ -8,7 +8,6 @@
     "bearychat": "^1.2.0",
     "hubot": "^3.1.1",
     "hubot-bearychat": "^0.7.2",
-    "hubot-help": "^1.0.1",
     "hubot-redis-brain": "^1.0.0"
   },
   "engines": {
