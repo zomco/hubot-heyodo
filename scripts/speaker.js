@@ -95,11 +95,12 @@ module.exports = async (robot) => {
     });
   });
 
-  // 清空转发消息缓存
+  // 清空消息缓存
   robot.respond(/clear/i, res => {
     const { message: { user: { message } } }= res;
     envelopes[message.uid] = null;
-    res.reply('缓存转发消息已清空。');
+    attachments[message.uid] = null;
+    res.reply('缓存消息已清空。');
   });
 
   // 监听对话消息
@@ -133,11 +134,25 @@ module.exports = async (robot) => {
       const attachment = attachments[message.uid];
       if (envelope && !attachment) {
         // 缓存了转发消息，则以对话消息为内容回复转发消息
-        const { is_member, name, error } = await bearychat.channel
-          .info({ token, channel_id: envelope.room.vchannel_id })
+        const vchannel = await bearychat.vchannel
+          .info({ token, vchannel_id: envelope.room.vchannel_id })
           .then(resp => resp.json())
           .catch(err => robot.logger.error(err));
-        if (is_member === true) {
+        let name = '';
+        switch (vchannel.type) {
+          case 'normal':
+            name = `讨论组 #${vchannel.name} `;
+            break;
+          case 'session':
+            name = vchannel.name ? `临时组 #${vchannel.name}` : '临时组';
+            break;
+          case 'p2p': 
+            name = `私信聊天`;
+            break;
+          default:
+            name = '未知会话';
+        }
+        if (vchannel && vchannel.is_member === true) {
           if (envelope.speaker.type === 'text') {
             const newMessage = robot.adapter.client.packMessage(true, envelope, [message.text]);
             robot.adapter.client.sendMessage(envelope, newMessage);
@@ -153,10 +168,10 @@ module.exports = async (robot) => {
           } else {
             res.send(`不对，你不该看到这句话，请联系作者。（${AUTHOR}）`);
           }
-        } else if (is_member === false) {
-          res.send(`@${BOT_NAME} 还不是讨论组 #${name} 的成员。`);
-        } else if (error) {
-          res.send(`出了点小问题，请稍后重试。（${error || ''}）`);
+        } else if (vchannel && vchannel.is_member === false) {
+          res.send(`@${BOT_NAME} 还不是${name}的成员。`);
+        } else if (vchannel && vchannel.error) {
+          res.send(`出了点小问题，请稍后重试。（${vchannel.error || ''}）`);
         } else {
           res.send(`出大问题了, 请联系作者。（${AUTHOR}）`);
         }
@@ -189,7 +204,7 @@ module.exports = async (robot) => {
         } else {
           res.send('以#讨论组或@用户名结尾，传声筒可以把消息发给对方。');
         }
-        attachment[message.uid] = null;
+        attachments[message.uid] = null;
       } else if (!envelope && !attachment) {
         if (/\s[#][^#\s]+\s$/.test(message.text)) {
           // 没有缓存转发消息，则直接匿名发送消息到讨论组
