@@ -23,14 +23,14 @@ refer to [hubot-bearychat](https://github.com/bearyinnovative/hubot-bearychat):
 | Message Type | From Channel | From Session | From P2P     |
 | ------------ | ------------ | ------------ | ------------ |
 | Text         | OK           | OK           | Not Support  | 
-| File         | OK           | OK           | Not Supoort  |
+| Image        | OK           | OK           | Not Supoort  |
 
 ### Send Anonymous Message
 
 | Message Type | To Channel | To Session  | To P2P       |
 | ------------ | ---------- | ----------- | ------------ |
-| Text         | OK         | Not Supoort | Not Support  | 
-| File         | OK         | Not Supoort | Not Supoort  |
+| Text         | OK         | Not Supoort | OK           | 
+| Image        | OK         | Not Supoort | OK           |
 
 ## LICENSE
 

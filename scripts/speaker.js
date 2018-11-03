@@ -75,7 +75,7 @@ module.exports = async (robot) => {
       text: '我就是你的传声筒',
       attachments: [
         {
-          text: `场景一，匿名回复消息：把想要匿名回复的消息转发给 @${BOT_NAME} ，顺便说点什么`,
+          text: `场景一，匿名回复消息：把想要匿名回复的消息转发给 @${BOT_NAME} ，顺便说点什么。支持回复讨论组、临时组消息的文本消息和图片消息。`,
         },
         {
           images: [
@@ -85,11 +85,8 @@ module.exports = async (robot) => {
           ]
         },
         {
-          text: `场景二, 发送匿名讨论组消息：把想要说的发给 @${BOT_NAME} ，并且以 #讨论组 结尾`,
+          text: `场景二, 匿名发送消息：把想要说的发给 @${BOT_NAME} ，并且以 #讨论组 或 @用户名 结尾。支持发送讨论组，私聊的文本消息和图片消息。`,
         },
-        // {
-        //   text: `场景三, 发送匿名会话消息：把想要说的发给 @${BOT_NAME}，并且以 #用户名 结尾`,
-        // },
       ]
     });
   });
@@ -151,7 +148,7 @@ module.exports = async (robot) => {
           default:
             name = '未知会话';
         }
-        if (vchannel && vchannel.is_member === true) {
+        if (vchannel && vchannel.is_member === true && vchannel.type !== 'p2p') {
           if (envelope.speaker.type === 'text') {
             const newMessage = robot.adapter.client.packMessage(true, envelope, [message.text]);
             robot.adapter.client.sendMessage(envelope, newMessage);
@@ -167,7 +164,7 @@ module.exports = async (robot) => {
           } else {
             res.send(`出大问题了, 请联系作者。（匿名回复消息类型错误）`);
           }
-        } else if (vchannel && vchannel.is_member === false) {
+        } else if (vchannel && vchannel.is_member === false && vchannel.type !== 'p2p') {
           res.send(`@${BOT_NAME} 还不是${name}的成员。`);
         } else if (vchannel && vchannel.error) {
           res.send(`出了点小问题，请稍后重试。（${vchannel.error}）`);
@@ -201,7 +198,33 @@ module.exports = async (robot) => {
             res.send(`出大问题了, 请联系作者。（讨论组匿名发送文件错误）`);
           }
         } else if (/\s[@][^@\s]+\s$/.test(message.text)) {
-          res.reply('暂不支持用户间的匿名消息。')
+          // 没有缓存转发消息，则直接匿名发送消息到用户
+          const match = message.text.match(/\s[@][^@\s]+\s$/);
+          const userId = match[0].trim().substring(1);
+          const messageText = message.text.substring(0, match.index);
+          const users = await bearychat.user
+            .list({ token })
+            .then(resp => resp.json())
+            .catch(err => robot.logger.error(err));
+          const user = users.find(user => `<=${user.id}=>` === userId);
+          if (user) {
+            const p2p = await bearychat.p2p
+              .create({ token, user_id: user.id })
+              .then(resp => resp.json())
+              .catch(err => robot.logger.error(err));
+            if (p2p) {
+              robot.emit('bearychat.attachment', {
+                message: { room: { vchannelId: p2p.vchannel_id } },
+                text: messageText,
+                attachments: [{ images: [{ url: attachment }] }],
+              });
+              res.reply(`你的声音已传达到 @${user.name} 。`);
+            } else {
+              res.reply(`与用户创建私聊会话失败。`)
+            }
+          } else {
+            res.reply(`消息接收用户不存在。`)
+          }
         } else {
           res.send('以#讨论组或@用户名结尾，传声筒可以把消息发给对方。');
         }
@@ -229,21 +252,28 @@ module.exports = async (robot) => {
           }
         } else if (/\s[@][^@\s]+\s$/.test(message.text)) {
           // 没有缓存转发消息，则直接匿名发送消息到用户
-          // const match = message.text.match(/\s[@][^@\s]+\s$/);
-          // const userId = match[0].trim().substring(1);
-          // const messageText = message.text.substring(0, match.index);
-          // const users = await bearychat.user
-          //   .list({ token })
-          //   .then(resp => resp.json())
-          //   .catch(err => robot.logger.error(err));
-          // const user = users.find(user => `<=${user.id}=>` === userId);
-          // if (user) {
-          //   robot.messageRoom(user.id, messageText);
-          //   res.reply(`你的声音已传达到 @${user.name} 。`);
-          // } else {
-          //   res.reply(`用户不存在。`)
-          // }
-          res.reply('暂不支持用户间的匿名消息。')
+          const match = message.text.match(/\s[@][^@\s]+\s$/);
+          const userId = match[0].trim().substring(1);
+          const messageText = message.text.substring(0, match.index);
+          const users = await bearychat.user
+            .list({ token })
+            .then(resp => resp.json())
+            .catch(err => robot.logger.error(err));
+          const user = users.find(user => `<=${user.id}=>` === userId);
+          if (user) {
+            const p2p = await bearychat.p2p
+              .create({ token, user_id: user.id })
+              .then(resp => resp.json())
+              .catch(err => robot.logger.error(err));
+            if (p2p) {
+              robot.messageRoom(p2p.vchannel_id, messageText);
+              res.reply(`你的声音已传达到 @${user.name} 。`);
+            } else {
+              res.reply(`与用户创建私聊会话失败。`)
+            }
+          } else {
+            res.reply(`消息接收用户不存在。`)
+          }
         } else {
           res.send('以#讨论组或@用户名结尾，传声筒可以把消息发给对方。');
         }
