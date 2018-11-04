@@ -87,6 +87,13 @@ module.exports = async (robot) => {
         {
           text: `场景二, 匿名发送消息：把想要说的发给 @${BOT_NAME} ，并且以 #讨论组 或 @用户名 结尾。支持发送讨论组，私聊的文本消息和图片消息。`,
         },
+        {
+          images: [
+            { 
+              url: 'https://github.com/zomco/hubot-speaker/blob/master/resources/example3.gif?raw=true',
+            }
+          ]
+        },
       ]
     });
   });
