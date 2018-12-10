@@ -1,6 +1,6 @@
 # hubot-speaker
 
-一个在[bearychat](https://bearychat.com)使用的发送和回复匿名消息的机器人，基于[hubot](https://hubot.github.com/)开发。
+一个在[bearychat](https://bearychat.com)使用的发送和回复匿名消息的机器人，基于[hubot](https://hubot.github.com/)开发。为了[https://www.v2ex.com/t/499071]()而写的
 
 ## 搭建
 

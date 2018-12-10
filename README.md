@@ -1,7 +1,8 @@
 # hubot-speaker
 
- a robot for anonymous messaging on bearychat[https://bearychat.com] based on [hubot](https://hubot.github.com/).
+ a robot for anonymous messaging on bearychat[https://bearychat.com] based on [hubot](https://hubot.github.com/). make it for [https://www.v2ex.com/t/499071]()
 
+
 ## Setup
 
 refer to [hubot-bearychat](https://github.com/bearyinnovative/hubot-bearychat):
